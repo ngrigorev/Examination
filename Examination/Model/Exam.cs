@@ -8,6 +8,7 @@ namespace Examination.Model
 {
     public class Exam : Paper
     {
+        [Obsolete]
         public List<Question> BuildQuestionList(List<Question> Questions, int QuestionsCount)
         {
             int avg = (int)Math.Round(Questions.Average(x => x.Complexity) * QuestionsCount);

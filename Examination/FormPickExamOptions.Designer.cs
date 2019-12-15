@@ -52,6 +52,7 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(100, 20);
             this.textBox1.TabIndex = 0;
+            this.textBox1.Text = "30";
             // 
             // label1
             // 
@@ -87,6 +88,7 @@
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(100, 20);
             this.textBox2.TabIndex = 4;
+            this.textBox2.Text = "5";
             // 
             // label3
             // 
@@ -103,6 +105,7 @@
             this.tbEkz.Name = "tbEkz";
             this.tbEkz.Size = new System.Drawing.Size(100, 20);
             this.tbEkz.TabIndex = 6;
+            this.tbEkz.Text = "Куделин А. Г.";
             // 
             // label4
             // 
@@ -119,6 +122,7 @@
             this.tbCaf.Name = "tbCaf";
             this.tbCaf.Size = new System.Drawing.Size(100, 20);
             this.tbCaf.TabIndex = 8;
+            this.tbCaf.Text = "Дорогобед А. Н.";
             // 
             // label5
             // 
@@ -135,6 +139,7 @@
             this.tbCourse.Name = "tbCourse";
             this.tbCourse.Size = new System.Drawing.Size(100, 20);
             this.tbCourse.TabIndex = 10;
+            this.tbCourse.Text = "3";
             // 
             // label6
             // 
@@ -151,6 +156,7 @@
             this.tbSemester.Name = "tbSemester";
             this.tbSemester.Size = new System.Drawing.Size(100, 20);
             this.tbSemester.TabIndex = 12;
+            this.tbSemester.Text = "5";
             // 
             // label7
             // 
