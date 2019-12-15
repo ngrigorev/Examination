@@ -14,6 +14,7 @@ namespace Examination.Controllers
     {
         private UnitOfWork unit = UnitOfWork.Instance;
         private static ExaminationController _instance;
+
         public static ExaminationController Instance
         {
             get
@@ -63,22 +64,22 @@ namespace Examination.Controllers
         }
         public void FormExam(int ID, int PaperCount, int QuestionsCount, string Teacher, string Cafedral, int course, int semester, string path)
         {
-            string Subject = unit.SubjectRepository.Get(ID).Name;
+            var Subject = unit.SubjectRepository.Get(ID).Name;
+            var questions = GetQuestions(ID);
+            var rnd = new Random();
+            object missing = System.Reflection.Missing.Value;
+
             Microsoft.Office.Interop.Word.Application winword = new Microsoft.Office.Interop.Word.Application();
             winword.ShowAnimation = false;
             winword.Visible = false;
-            object missing = System.Reflection.Missing.Value;
             Microsoft.Office.Interop.Word.Document document = winword.Documents.Add(ref missing, ref missing, ref missing, ref missing);
+
             for (int i = 0; i < PaperCount; i++)
             {
-                var exam = new Model.Exam();
+                var exam = new Exam();
                 exam.Title = "Билет №" + (i + 1).ToString();
                 
-                var papers = exam.BuildQuestionList(GetQuestions(ID), QuestionsCount);
-                
-                //Microsoft.Office.Interop.Word.Document document = winword.Documents.Add(ref missing, ref missing, ref missing, ref missing);
-                
-                //document.Content.SetRange(0, 0);
+                var papers = questions.OrderBy(x => rnd.Next(1000)).Take(QuestionsCount).ToList();
 
                 var wp = document.Paragraphs.Add(Type.Missing);
                 wp.Range.Font.Size = 12;
@@ -135,6 +136,7 @@ namespace Examination.Controllers
                 wp.Range.Font.Name = "Times New Roman";
                 var dt = DateTime.Now;
                 string str = "";
+
                 if (dt.Month <= 6)
                 {
                     str = $"{dt.Year - 1} - {dt.Year} учебный год";
@@ -143,6 +145,7 @@ namespace Examination.Controllers
                 {
                     str = $"{dt.Year} - {dt.Year + 1} учебный год";
                 }
+
                 wp.Range.Text = str;
                 wp.Range.ParagraphFormat.SpaceAfter = 0;
                 wp.Range.ParagraphFormat.Alignment = Microsoft.Office.Interop.Word.WdParagraphAlignment.wdAlignParagraphLeft;
@@ -223,8 +226,8 @@ namespace Examination.Controllers
                 wp.Range.ParagraphFormat.SpaceBefore = 0;
                 wp.Range.ParagraphFormat.SpaceAfter = 0;
                 wp.Range.InsertParagraphAfter();
-                if (i != PaperCount - 1)
-                    wp.Range.InsertBreak();
+
+                if (i != PaperCount - 1) wp.Range.InsertBreak();
             }
 
             object filename = $"{path}\\{Subject} {DateTime.Now.Day}.{DateTime.Now.Month}.{DateTime.Now.Year}.docx";
@@ -240,14 +243,18 @@ namespace Examination.Controllers
         public void FormTest(int ID, string path)
         {
             var excelApp = new Microsoft.Office.Interop.Excel.Application();
-            
             excelApp.Visible = true;
+
             var book = excelApp.Workbooks.Add();
             Microsoft.Office.Interop.Excel._Worksheet sheet = (Microsoft.Office.Interop.Excel.Worksheet)excelApp.ActiveSheet;
+
             Thread.Sleep(4000);
+
             var subject = unit.SubjectRepository.Get(ID).Name;
-            List<Question> questions = GetQuestions(ID);
+            var questions = GetQuestions(ID);
+
             sheet.Cells[1, 1] = subject;
+
             for (int i = 1; i <= questions.Count; i++)
             {
                 sheet.Cells[i + 1, 1] = i;
